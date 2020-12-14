@@ -60,6 +60,7 @@
 						<image>
 							<name>docker.io/erezshin/docker-maven-demo</name>
 							<build>
+								<cleanup>remove</cleanup>
 								<dockerFile>${project.basedir}/Dockerfile</dockerFile>
 							</build>
 							<run>
