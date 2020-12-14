@@ -1,18 +1,19 @@
-node {
-    checkout scm
-    def mvnHome
-    cleanWS()
-    stage('Preparation') { 
-        
-        git 'https://github.com/erezshi/tikal-demo.git'
-        mvnHome = tool 'M3'
+pipeline {
+    agent any
+    tools {
+        maven "M3"
     }
-    stage('Build') {
-        withEnv(["MVN_HOME=$mvnHome"]) {
-            sh '"$MVN_HOME/bin/mvn" clean install'
+    stages {
+        stage('Build') {
+            steps {
+                git 'https://github.com/erezshi/tikal-demo.git'
+                sh "mvn clean install"
+            }
+            post {
+                success {
+                    junit '**/target/surefire-reports/TEST-*.xml'
+                }
+            }
         }
-    }
-    stage('Results') {
-        junit '**/target/surefire-reports/TEST-*.xml'
     }
 }
